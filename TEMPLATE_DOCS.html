@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkripsiSh1re LaTeX Template — Javadoc & File Compendium</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-alt: #f1f5f9;
+      --border: #cbd5e1;
+      --border-light: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --nav-bg: #1e293b;
+      --nav-text: #f8fafc;
+      --nav-muted: #94a3b8;
+      --primary: #1d4ed8;
+      --primary-bg: #eff6ff;
+      --accent: #b45309;
+      --accent-bg: #fef3c7;
+      --success: #15803d;
+      --success-bg: #dcfce7;
+      --code-bg: #0f172a;
+      --code-text: #e2e8f0;
+      --javadoc-header: #e0e7ff;
+      --javadoc-border: #818cf8;
+      --shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b1120;
+      --surface: #111827;
+      --surface-alt: #1e293b;
+      --border: #334155;
+      --border-light: #1e293b;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --nav-bg: #090d16;
+      --nav-text: #f8fafc;
+      --nav-muted: #94a3b8;
+      --primary: #60a5fa;
+      --primary-bg: #1e3a8a44;
+      --accent: #fbbf24;
+      --accent-bg: #78350f44;
+      --success: #4ade80;
+      --success-bg: #14532d44;
+      --code-bg: #020617;
+      --code-text: #e2e8f0;
+      --javadoc-header: #1e293b;
+      --javadoc-border: #4f46e5;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    code, pre, .mono {
+      font-family: "Cascadia Code", "JetBrains Mono", "Fira Code", Consolas, "Courier New", monospace;
+    }
+
+    /* Left Sidebar (Javadoc Package/Class Navigation) */
+    .sidebar {
+      width: 310px;
+      background: var(--nav-bg);
+      color: var(--nav-text);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      border-right: 1px solid var(--border);
+    }
+
+    .sidebar-header {
+      padding: 16px 18px;
+      border-bottom: 1px solid #334155;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-subtitle {
+      font-size: 0.78rem;
+      color: var(--nav-muted);
+      margin-top: 4px;
+    }
+
+    .search-box {
+      padding: 12px 16px;
+      border-bottom: 1px solid #334155;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 11px;
+      border-radius: 6px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.25);
+    }
+
+    .nav-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 0 24px 0;
+    }
+
+    .nav-group-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--nav-muted);
+      padding: 12px 18px 6px 18px;
+      font-weight: 700;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 18px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 0.84rem;
+      border-left: 3px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.07);
+      color: #ffffff;
+      border-left-color: #60a5fa;
+    }
+
+    .nav-badge {
+      font-size: 0.68rem;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #93c5fd;
+      font-family: Consolas, monospace;
+    }
+
+    .nav-badge.focus {
+      background: #f59e0b33;
+      color: #fcd34d;
+      border: 1px solid #f59e0b66;
+    }
+
+    /* Main Content Area */
+    .main {
+      margin-left: 310px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    /* Top Javadoc Navbar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+    }
+
+    .topbar-links {
+      display: flex;
+      gap: 18px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .topbar-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .topbar-links a:hover {
+      color: var(--primary);
+      background: var(--primary-bg);
+    }
+
+    .theme-btn {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--primary);
+    }
+
+    .content {
+      padding: 28px 36px 64px 36px;
+      max-width: 1280px;
+    }
+
+    /* Package Header Banner */
+    .doc-banner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--primary);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .doc-banner .pkg-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--primary);
+    }
+
+    .doc-banner h1 {
+      font-size: 1.55rem;
+      margin: 4px 0 8px 0;
+    }
+
+    .doc-banner p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-light);
+      font-size: 0.83rem;
+    }
+
+    .meta-item strong {
+      color: var(--text);
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* Sections */
+    .doc-section {
+      margin-bottom: 38px;
+      scroll-margin-top: 68px;
+    }
+
+    .section-header {
+      background: var(--javadoc-header);
+      border: 1px solid var(--javadoc-border);
+      padding: 10px 16px;
+      border-radius: 6px 6px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-header h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .section-header .sec-tag {
+      font-size: 0.76rem;
+      font-family: Consolas, monospace;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .section-body {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Javadoc Summary Tables */
+    table.javadoc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.87rem;
+    }
+
+    table.javadoc-table th {
+      background: var(--surface-alt);
+      color: var(--text);
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border);
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    table.javadoc-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: top;
+    }
+
+    table.javadoc-table tr:hover td {
+      background: var(--primary-bg);
+    }
+
+    /* VS Code Links & Badges */
+    .file-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: Consolas, monospace;
+      font-size: 0.81rem;
+      color: var(--primary);
+      background: var(--primary-bg);
+      padding: 3px 8px;
+      border-radius: 5px;
+      text-decoration: none;
+      border: 1px solid rgba(29, 78, 216, 0.25);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .file-link:hover {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.73rem;
+      font-weight: 600;
+      font-family: Consolas, monospace;
+    }
+
+    .badge-active {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .badge-commented {
+      background: var(--surface-alt);
+      color: var(--text-muted);
+    }
+
+    .badge-focus {
+      background: var(--accent-bg);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    /* Javadoc API Detail Cards */
+    .api-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 20px;
+      background: var(--surface);
+      overflow: hidden;
+      scroll-margin-top: 72px;
+    }
+
+    .api-card-header {
+      background: var(--surface-alt);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .api-signature {
+      font-family: Consolas, monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .api-card-body {
+      padding: 16px 18px;
+      font-size: 0.9rem;
+    }
+
+    .api-desc {
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .api-meta-list {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      row-gap: 6px;
+      column-gap: 12px;
+      font-size: 0.84rem;
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      background: var(--surface-alt);
+      border-radius: 6px;
+    }
+
+    .api-meta-label {
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    /* Code Blocks with Copy Button */
+    .code-wrapper {
+      position: relative;
+      margin-top: 8px;
+    }
+
+    .code-wrapper pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      border: 1px solid #334155;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 4px;
+      padding: 3px 9px;
+      font-size: 0.73rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .hidden-by-filter {
+      display: none !important;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+      }
+      body {
+        flex-direction: column;
+      }
+      .main {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LEFT SIDEBAR (Javadoc Navigation) -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">
+        <span>SkripsiSh1re Docs</span>
+        <span class="nav-badge">LuaLaTeX</span>
+      </div>
+      <div class="sidebar-subtitle">USD Informatics Thesis Compendium & API</div>
+    </div>
+
+    <div class="search-box">
+      <input
+        type="text"
+        id="searchInput"
+        class="search-input"
+        placeholder="Filter sections, macros, files... ( / )"
+        autocomplete="off"
+      />
+    </div>
+
+    <nav class="nav-scroll" id="sidebarNav">
+      <div class="nav-group-label">Overview</div>
+      <a class="nav-link" href="#sec-arch"><span>Repository File Tree</span><span class="nav-badge">Map</span></a>
+      <a class="nav-link" href="#sec-preamble"><span>1. Preamble & Global Config</span><span class="nav-badge">L1–593</span></a>
+
+      <div class="nav-group-label">Document Structure Map</div>
+      <a class="nav-link" href="#sec-frontmatter"><span>2. Front Matter Pages</span><span class="nav-badge">17 Pages</span></a>
+      <a class="nav-link" href="#sec-mainmatter"><span>3. Main Matter (BAB I–V)</span><span class="nav-badge">Chapters</span></a>
+      <a class="nav-link" href="#row-bab3"><span>↳ BAB III: Metode Penelitian</span><span class="nav-badge focus">FOCUS</span></a>
+      <a class="nav-link" href="#sec-backmatter"><span>4. Back Matter & Lampiran</span><span class="nav-badge">L1068+</span></a>
+
+      <div class="nav-group-label">Macro & Environment API</div>
+      <a class="nav-link" href="#api-metadata"><span>\def\title, \author, \nim...</span><span class="nav-badge">Meta</span></a>
+      <a class="nav-link" href="#api-subimport"><span>\subimport{dir}{file}</span><span class="nav-badge">Import</span></a>
+      <a class="nav-link" href="#api-equation"><span>equation + \myequation</span><span class="nav-badge">Eq</span></a>
+      <a class="nav-link" href="#api-algorithm"><span>algorithm + \myalgorithm</span><span class="nav-badge">Alg</span></a>
+      <a class="nav-link" href="#api-table"><span>longtblr / newtblr</span><span class="nav-badge">Table</span></a>
+      <a class="nav-link" href="#api-figure"><span>figure[H] & subfigure</span><span class="nav-badge">Fig</span></a>
+      <a class="nav-link" href="#api-acronym"><span>\newacronym & \acrshort</span><span class="nav-badge">Gloss</span></a>
+      <a class="nav-link" href="#api-citation"><span>\parencite & \cite (IEEE)</span><span class="nav-badge">Bib</span></a>
+      <a class="nav-link" href="#api-lampiran"><span>\section + \mylampiran</span><span class="nav-badge">Apx</span></a>
+      <a class="nav-link" href="#api-lstlisting"><span>lstlisting (Code Blocks)</span><span class="nav-badge">Code</span></a>
+      <a class="nav-link" href="#api-tikz"><span>TikZ Flowchart Styles</span><span class="nav-badge">TikZ</span></a>
+      <a class="nav-link" href="#api-xref"><span>Cross-Referencing (\ref)</span><span class="nav-badge">Ref</span></a>
+
+      <div class="nav-group-label">Build & Execution</div>
+      <a class="nav-link" href="#sec-build"><span>5. CLI Build & VS Code Recipe</span><span class="nav-badge">CLI</span></a>
+      <a class="nav-link" href="#sec-external"><span>6. Read-Only Reference Dirs</span><span class="nav-badge">Refs</span></a>
+    </nav>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-links">
+        <a href="#sec-arch">Overview</a>
+        <a href="#sec-preamble">Preamble</a>
+        <a href="#sec-frontmatter">Front Matter</a>
+        <a href="#sec-mainmatter">Chapters (Bab I–V)</a>
+        <a href="#sec-backmatter">Back Matter</a>
+        <a href="#sec-api">Macro API</a>
+        <a href="#sec-build">Build CLI</a>
+      </div>
+      <button class="theme-btn" id="themeToggle" type="button">Toggle Dark/Light</button>
+    </header>
+
+    <main class="content">
+      <!-- HEADER BANNER -->
+      <div class="doc-banner">
+        <div class="pkg-label">Package :: d:\KULIAH\SkripsiLatek\SkripsiSh1re\SkripsiSh1re</div>
+        <h1>USD Informatics Thesis LaTeX Template — Javadoc & File Compendium</h1>
+        <p>
+          Interactive reference manual mapping every page, chapter, preamble setting, and custom registration macro in
+          <code>SkripsiSh1re</code>. Click any blue <code>file.tex:L#</code> badge to jump directly to that line in VS Code.
+        </p>
+        <div class="meta-grid">
+          <div class="meta-item">
+            <strong>Author & NIM</strong>
+            Anugrah Frumensius Gansalangi (235314091)
+          </div>
+          <div class="meta-item">
+            <strong>Master Entry File</strong>
+            <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1">main.tex:L1–1086</a>
+          </div>
+          <div class="meta-item">
+            <strong>Required Compiler Engine</strong>
+            <code>lualatex</code> + <code>makeglossaries</code> + <code>biber</code>
+          </div>
+          <div class="meta-item">
+            <strong>Current Active Focus</strong>
+            <span class="badge badge-focus">BAB III: Metode Penelitian</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 0: REPOSITORY ARCHITECTURE -->
+      <section class="doc-section" id="sec-arch">
+        <div class="section-header">
+          <h2>0. Repository File Tree & Subfile Architecture</h2>
+          <span class="sec-tag">SkripsiSh1re/</span>
+        </div>
+        <div class="section-body">
+          <p class="api-desc">
+            The master file is <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1">main.tex</a>
+            (do <strong>not</strong> edit <code>template.tex</code>, which is kept only as a legacy base reference). Subfiles are imported via
+            <code>\subimport{&lt;Folder&gt;}{&lt;filename&gt;}</code>.
+          </p>
+          <div class="code-wrapper">
+            <button class="copy-btn" onclick="copyCode(this)">Copy Tree</button>
+            <pre><code>SkripsiSh1re/
+├── main.tex                                      # Master LaTeX document (Preamble, Frontmatter layout, Chapter imports)
+├── main.pdf                                      # Compiled PDF output
+├── indonesian.lbx                                # Custom BibLaTeX Bahasa Indonesia strings
+├── Front_matters/
+│   ├── glossary_entries.tex                      # Custom 'acronymstyle' + \newacronym definitions (Daftar Singkatan)
+│   ├── kata_pengantar.tex                        # Kata Pengantar (Preface) body & signature block
+│   ├── abstract.tex                              # Indonesian Abstrak & Kata kunci
+│   └── abstract_english.tex                      # English Abstract & Keywords
+├── Skripsi/
+│   ├── Pendahuluan/pendahuluan.tex               # BAB I: Pendahuluan
+│   ├── Landasan_Teori/landasan_teori.tex         # BAB II: Landasan Teori
+│   ├── Metode_Penelitian/metode_penelitian.tex   # BAB III: Metode Penelitian  <-- [CURRENT ACTIVE FOCUS]
+│   ├── Hasil_Penelitian/hasil_penelitian.tex     # BAB IV: Hasil Penelitian
+│   └── Kesimpulan/kesimpulan.tex                 # BAB V: Kesimpulan
+└── Back_matters/
+    ├── lampiran.tex                              # LAMPIRAN (\section + \mylampiran)
+    └── attachments/                              # CSV data files imported by lampiran.tex</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 1: PREAMBLE & GLOBAL CONFIG -->
+      <section class="doc-section" id="sec-preamble">
+        <div class="section-header">
+          <h2>1. Preamble, Metadata & Global Formatting Summary (Before \begin{document})</h2>
+          <span class="sec-tag">main.tex:L1–L593</span>
+        </div>
+        <div class="section-body">
+          <table class="javadoc-table">
+            <thead>
+              <tr>
+                <th style="width: 27%;">Configuration / Block</th>
+                <th style="width: 25%;">File & Exact Line Link</th>
+                <th>Description & Key Macros Defined</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="filter-item">
+                <td><strong>Document Class & A4 Margins</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:5">main.tex:L5–L17</a></td>
+                <td><code>\documentclass[oneside, 12pt, a4paper]{book}</code>; USD margins <code>left=4cm, right=3cm, top=3cm, bottom=3cm</code>; first-line paragraph indent <code>\setlength{\parindent}{0.5in}</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Package Imports & Glossary Load</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:8">main.tex:L8–L69</a></td>
+                <td>Loads all core packages (<code>babel</code>, <code>titlesec</code>, <code>fontspec</code>, <code>fancyhdr</code>, <code>tocloft</code>, <code>tabularray</code>, <code>algpseudocode</code>, <code>icomma</code>, <code>glossaries</code>) and runs <code>\subimport{Front_matters}{glossary_entries}</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>VS Code Build Recipe Comment</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:70">main.tex:L70–L103</a></td>
+                <td>Reference JSON settings for <code>latex-workshop.latex.recipes</code> (<code>lualatexmk</code> &rarr; <code>makeglossaries</code> &rarr; <code>lualatexmk</code>).</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Custom <code>newtblr</code> Table Wrapper</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:108">main.tex:L108–L114</a></td>
+                <td>Defines <code>\NewTblrEnviron{newtblr}</code> with outer <code>long</code> mode and bold header row styling.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Thesis Metadata Variables</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:118">main.tex:L118–L130</a></td>
+                <td>Global definitions for <code>\title</code>, <code>\englishtitle</code>, <code>\author</code>, <code>\nim</code>, <code>\prodi</code>, <code>\program</code>, <code>\fakultas</code>, <code>\faculty</code>, <code>\sarjana</code>, <code>\pembimbing</code>, <code>\ketuapenguji</code>, <code>\sekretarispenguji</code>, <code>\dekan</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Yellow USD Watermark Config</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:135">main.tex:L135–L140</a></td>
+                <td>Configures <code>SANATA_DHARMA_yellow.png</code> background watermark (scale 3, opacity 0.8). Triggered on specific approval pages via <code>\BgThispage</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>BibLaTeX IEEE & Indonesian LBX</strong></td>
+                <td>
+                  <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:145">main.tex:L145–L148</a><br/>
+                  <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/indonesian.lbx:1" style="margin-top:4px;">indonesian.lbx:L1–L26</a>
+                </td>
+                <td>Sets <code>\usepackage[style=ieee]{biblatex}</code>, maps Indonesian localization strings, and registers <code>\addbibresource{examplecitations.bib}</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Main Body Font</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:153">main.tex:L153</a></td>
+                <td><code>\setmainfont{Times New Roman}</code> (requires <code>lualatex</code>).</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>TikZ Flowchart Node Styles</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:156">main.tex:L156–L208</a></td>
+                <td>Defines flowchart node styles: <code>startstop</code>, <code>io</code>, <code>process</code>, <code>decision</code>, <code>subprocess</code>, and <code>arrow</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Lists & Page Numbering (<code>fancyhdr</code>)</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:212">main.tex:L212–L236</a></td>
+                <td>Configures <code>enumerate</code> margins; sets regular page numbers to <strong>top-right</strong> (<code>fancy</code>) and chapter opening page numbers to <strong>bottom-right</strong> (<code>plain</code>).</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Table Continuation & Caption Labels</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:239">main.tex:L239–L243</a></td>
+                <td>Localizes multi-page <code>tabularray</code> captions into Indonesian (<code>Tabel X.Y:</code>, <em>Lanjutan</em>, <em>Dilanjutkan di halaman selanjutnya</em>).</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Chapter & Section Heading Formats</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:246">main.tex:L246–L272</a></td>
+                <td><code>\titleformat</code> and <code>\titlespacing*</code> for <code>\chapter</code>, <code>\section</code>, <code>\subsection</code>, and <code>\subsubsection</code>; sets <code>secnumdepth</code> to 5.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Block Quotes & Equation Spacing Hooks</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:275">main.tex:L275–L301</a></td>
+                <td>Redefines <code>quote</code> with <code>0.5in</code> left margin; adds <code>\vspace{-0.5cm}</code> hooks around <code>equation</code> and <code>equation*</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Per-Chapter Counter Formats (<code>X.Y</code>)</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:309">main.tex:L309–L326</a></td>
+                <td>Formats tables, figures, equations, and listings as <code>\arabic{chapter}.\arabic{...}</code> (e.g., <code>Tabel 3.1</code>, <code>Gambar 3.2</code>, <code>(3.1)</code>).</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Code Listing Setup (<code>\lstset</code>)</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:331">main.tex:L331–L345</a></td>
+                <td>Configures <code>lstlisting</code> line numbers, line wrapping, and syntax highlighting colors.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Daftar Lampiran, Daftar Isi, Gambar, Tabel Styling</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:350">main.tex:L350–L498</a></td>
+                <td>Defines <code>\newlistof{mylampiran}{lamp}{DAFTAR LAMPIRAN}</code>, <code>\mylampiran{...}</code>, and uppercase <code>tocloft</code> formatting for TOC, LOF, and LOT.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Daftar Persamaan & <code>\myequation</code></strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:502">main.tex:L502–L539</a></td>
+                <td>Defines <code>\listofmyequations</code> (<code>PERSAMAAN X.Y</code> prefix) and the mandatory registration macro <code>\myequation{Deskripsi}</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Daftar Algoritma, <code>\myalgorithm</code> & Courier New 10pt</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:541">main.tex:L541–L574</a></td>
+                <td>Detaches algorithm counter from chapter (global <code>1, 2, ...</code>), defines <code>\myalgorithm{Nama}</code>, and hooks <code>Courier New</code> 10pt single-spaced into <code>algorithmic</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Hyphenation Suppression & Bib Spacing</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:583">main.tex:L583–L592</a></td>
+                <td>Disables word hyphenation globally (<code>\hyphenpenalty=10000</code>) and sets <code>\setlength{\bibitemsep}{2\itemsep}</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 2: FRONT MATTER PAGES -->
+      <section class="doc-section" id="sec-frontmatter">
+        <div class="section-header">
+          <h2>2. Front Matter Pages Map (\frontmatter — Pages i to xvii)</h2>
+          <span class="sec-tag">main.tex:L596–L1014</span>
+        </div>
+        <div class="section-body">
+          <table class="javadoc-table">
+            <thead>
+              <tr>
+                <th style="width: 5%;">#</th>
+                <th style="width: 26%;">Page / Section Title</th>
+                <th style="width: 22%;">Location in <code>main.tex</code></th>
+                <th style="width: 23%;">Subfile to Edit (If External)</th>
+                <th>Status & Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="filter-item">
+                <td><strong>1</strong></td>
+                <td><strong>Halaman Judul Skripsi</strong> (Cover)</td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:598">main.tex:L598–L633</a></td>
+                <td><em>Inline (uses L118–L130 macros)</em></td>
+                <td><span class="badge badge-active">Active</span> Indonesian title page (unnumbered cover).</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>1b</strong></td>
+                <td><em>Halaman Judul Proposal</em></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:637">main.tex:L637–L667</a></td>
+                <td><em>Inline in <code>main.tex</code></em></td>
+                <td><span class="badge badge-commented">Commented</span> Uncomment only when compiling Proposal cover.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>2</strong></td>
+                <td><strong>English Title Page</strong> (<code>THESIS</code>)</td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:676">main.tex:L676–L710</a></td>
+                <td><em>Inline (uses <code>\englishtitle</code>)</em></td>
+                <td><span class="badge badge-active">Active</span> Starts <code>\frontmatter</code> (Roman page <code>i</code>).</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>3</strong></td>
+                <td><strong>Halaman Persetujuan Pembimbing</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:714">main.tex:L714–L745</a></td>
+                <td><em>Inline in <code>main.tex</code></em></td>
+                <td><span class="badge badge-active">Active</span> Advisor signature page (<code>\BgThispage</code> on L718).</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>3b</strong></td>
+                <td><em>Persetujuan Proposal Metopen</em></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:750">main.tex:L750–L804</a></td>
+                <td><em>Inline in <code>main.tex</code></em></td>
+                <td><span class="badge badge-commented">Commented</span> For <code>PENL102</code> Metode Penelitian course.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>4</strong></td>
+                <td><strong>Halaman Pengesahan</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:808">main.tex:L808–L867</a></td>
+                <td><em>Inline in <code>main.tex</code></em></td>
+                <td><span class="badge badge-active">Active</span> Board of Examiners (<code>SUSUNAN DEWAN PENGUJI</code>) & Dean.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>5</strong></td>
+                <td><strong>Halaman Pernyataan Keaslian Karya</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:871">main.tex:L871–L888</a></td>
+                <td><em>Inline in <code>main.tex</code></em></td>
+                <td><span class="badge badge-active">Active</span> Originality & anti-plagiarism declaration.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>6</strong></td>
+                <td><strong>Lembar Pernyataan Persetujuan Publikasi</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:892">main.tex:L892–L934</a></td>
+                <td><em>Inline in <code>main.tex</code></em></td>
+                <td><span class="badge badge-active">Active</span> USD Library repository publication consent form.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>7</strong></td>
+                <td><strong>Halaman Motto</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:937">main.tex:L937–L946</a></td>
+                <td><em>Inline (edit L943–L946)</em></td>
+                <td><span class="badge badge-active">Active</span> Personal motto page.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>8</strong></td>
+                <td><strong>Kata Pengantar</strong> (Preface)</td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:950">main.tex:L950–L959</a></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Front_matters/kata_pengantar.tex:1">Front_matters/kata_pengantar.tex:L1–L12</a></td>
+                <td><span class="badge badge-active">Active</span> Edit preface text in <code>kata_pengantar.tex</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>9</strong></td>
+                <td><strong>Abstrak</strong> (Bahasa Indonesia)</td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:964">main.tex:L964–L968</a></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Front_matters/abstract.tex:1">Front_matters/abstract.tex:L1–L3</a></td>
+                <td><span class="badge badge-active">Active</span> Indonesian abstract (&le; 250 words) + <code>Kata kunci:</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>10</strong></td>
+                <td><strong>Abstract</strong> (English)</td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:972">main.tex:L972–L976</a></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Front_matters/abstract_english.tex:1">Front_matters/abstract_english.tex:L1–L4</a></td>
+                <td><span class="badge badge-active">Active</span> English abstract (&le; 250 words) + <code>Keywords:</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>11</strong></td>
+                <td><strong>DAFTAR ISI</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:982">main.tex:L982–L986</a></td>
+                <td><em>Auto-generated (<code>\tableofcontents</code>)</em></td>
+                <td><span class="badge badge-active">Auto</span> Depth = 2 (Chapters, <code>\section</code>, <code>\subsection</code>).</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>12</strong></td>
+                <td><strong>DAFTAR TABEL</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:991">main.tex:L991–L992</a></td>
+                <td><em>Auto-generated (<code>\listoftables</code>)</em></td>
+                <td><span class="badge badge-active">Auto</span> Populated by <code>longtblr</code> / <code>table</code> captions.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>13</strong></td>
+                <td><strong>DAFTAR GAMBAR</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:994">main.tex:L994–L995</a></td>
+                <td><em>Auto-generated (<code>\listoffigures</code>)</em></td>
+                <td><span class="badge badge-active">Auto</span> Populated by <code>figure</code> captions.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>14</strong></td>
+                <td><strong>Daftar Algoritma</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:997">main.tex:L997–L998</a></td>
+                <td><em>Auto-generated (<code>\listofmyalgorithms</code>)</em></td>
+                <td><span class="badge badge-active">Auto</span> Requires <code>\myalgorithm{Nama}</code> after every <code>algorithm</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>15</strong></td>
+                <td><strong>Daftar Persamaan</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1000">main.tex:L1000–L1001</a></td>
+                <td><em>Auto-generated (<code>\listofmyequations</code>)</em></td>
+                <td><span class="badge badge-active">Auto</span> Requires <code>\myequation{Deskripsi}</code> after every <code>equation</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>16</strong></td>
+                <td><strong>Daftar Singkatan</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1003">main.tex:L1003–L1006</a></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Front_matters/glossary_entries.tex:40">Front_matters/glossary_entries.tex:L40–L74</a></td>
+                <td><span class="badge badge-active">Auto</span> Populated when <code>\acrshort</code>/<code>\acrlong</code>/<code>\gls</code> is used + <code>makeglossaries main</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>17</strong></td>
+                <td><strong>DAFTAR LAMPIRAN</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1008">main.tex:L1008–L1011</a></td>
+                <td><em>Auto-generated (<code>\listofmylampiran</code>)</em></td>
+                <td><span class="badge badge-active">Auto</span> Requires <code>\mylampiran{Judul}</code> after each <code>\section</code> in <code>lampiran.tex</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 3: MAIN MATTER CHAPTERS -->
+      <section class="doc-section" id="sec-mainmatter">
+        <div class="section-header">
+          <h2>3. Main Matter Chapters Map (\mainmatter — BAB I to BAB V)</h2>
+          <span class="sec-tag">main.tex:L1019–L1064</span>
+        </div>
+        <div class="section-body">
+          <p class="api-desc">
+            All chapters are wrapped inside <code>\begin{doublespace}...\end{doublespace}</code> and <code>\justifying</code> in
+            <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1019">main.tex:L1019–L1064</a>.
+            Store chapter-specific figures inside that chapter's folder so <code>\includegraphics</code> can load them by filename.
+          </p>
+          <table class="javadoc-table">
+            <thead>
+              <tr>
+                <th style="width: 18%;">Chapter</th>
+                <th style="width: 20%;">Import Call in <code>main.tex</code></th>
+                <th style="width: 28%;">Chapter Source File to Edit</th>
+                <th>Current Sections & Planned USD Thesis Contents</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="filter-item">
+                <td><strong>BAB I<br/>PENDAHULUAN</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1034">main.tex:L1034–L1035</a></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Skripsi/Pendahuluan/pendahuluan.tex:1">Skripsi/Pendahuluan/pendahuluan.tex:L1–L79</a></td>
+                <td>
+                  <strong>Currently contains template tutorial sections:</strong>
+                  <code>1.1 Section example</code> (L2), <code>1.2 Tables</code> (L5), <code>1.3 Images</code> (L21), <code>1.3.1 Subimages</code> (L30), <code>1.4 Labeling</code> (L47).<br/>
+                  <strong>Target USD Subchapters:</strong> <code>1.1 Latar Belakang</code>, <code>1.2 Rumusan Masalah</code>, <code>1.3 Batasan Masalah</code>, <code>1.4 Batasan Istilah</code>, <code>1.5 Tujuan Penelitian</code>, <code>1.6 Manfaat Penelitian</code>.
+                </td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>BAB II<br/>LANDASAN TEORI</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1038">main.tex:L1038–L1039</a></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Skripsi/Landasan_Teori/landasan_teori.tex:1">Skripsi/Landasan_Teori/landasan_teori.tex:L1</a></td>
+                <td>
+                  <strong>Currently:</strong> <code>\chapter{Landasan Teori}</code> (1 line).<br/>
+                  <strong>Target Subchapters:</strong> Multi-Armed Bandits &amp; Policies (UCB1, &epsilon;-Greedy, Thompson Sampling), Cooperative MAMAB &amp; <code>GosInE</code> (Chawla 2020; Dumatubun), Escalating Peer Blocking <code>GosInE-Block</code> (Vial 2021), Beta Reputation System (J&oslash;sang &amp; Ismail 2002), Related Work Comparison Table.
+                </td>
+              </tr>
+              <tr class="filter-item" id="row-bab3">
+                <td>
+                  <strong>BAB III<br/>METODE PENELITIAN</strong><br/>
+                  <span class="badge badge-focus" style="margin-top:4px;">ACTIVE FOCUS</span>
+                </td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1041">main.tex:L1041–L1042</a></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Skripsi/Metode_Penelitian/metode_penelitian.tex:1">Skripsi/Metode_Penelitian/metode_penelitian.tex:L1</a></td>
+                <td>
+                  <strong>Currently:</strong> <code>\chapter{Metode Penelitian}</code> (1 line).<br/>
+                  <strong>Target Subchapters:</strong><br/>
+                  &bull; <strong>3.1</strong> Dataset MovieLens 20M &amp; Preprocessing Pipeline (Rating normalization, user trust weights <code>w_u = ln(1+C_u)</code>, Gaussian arm extraction <code>K=100</code>)<br/>
+                  &bull; <strong>3.2</strong> Arsitektur Sistem MAMAB &amp; Model Ancaman (<code>N=25</code>, active set <code>S_j^(i)</code>, polynomial phases <code>A_j = &lceil;j^&beta;&rceil;</code>, Uniform data poisoning <code>m &in; {0,5,10,15,20}</code>)<br/>
+                  &bull; <strong>3.3</strong> Perancangan Mekanisme Pertahanan (Flowcharts, pseudocode &amp; math for <code>GosInE-Block</code>, <code>Pure BRS-GosInE</code>, and <code>Hybrid BRS-Block</code>)<br/>
+                  &bull; <strong>3.4</strong> Skenario Eksperimen &amp; Metrik Evaluasi (Hyperparameter table, Cumulative Regret <code>R_T</code>, Rolling Reward, <code>MCR_j</code>, <code>FBR_j</code>).
+                </td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>BAB IV<br/>HASIL PENELITIAN</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1044">main.tex:L1044–L1045</a></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Skripsi/Hasil_Penelitian/hasil_penelitian.tex:1">Skripsi/Hasil_Penelitian/hasil_penelitian.tex:L1</a></td>
+                <td>
+                  <strong>Currently:</strong> <code>\chapter{Hasil Penelitian}</code> (1 line).
+                </td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>BAB V<br/>KESIMPULAN</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1047">main.tex:L1047–L1048</a></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Skripsi/Kesimpulan/kesimpulan.tex:1">Skripsi/Kesimpulan/kesimpulan.tex:L1</a></td>
+                <td>
+                  <strong>Currently:</strong> <code>\chapter{Kesimpulan}</code> (1 line).
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 4: BACK MATTER & LAMPIRAN -->
+      <section class="doc-section" id="sec-backmatter">
+        <div class="section-header">
+          <h2>4. Back Matter & Appendices Map (\backmatter & \appendix)</h2>
+          <span class="sec-tag">main.tex:L1068–L1086</span>
+        </div>
+        <div class="section-body">
+          <table class="javadoc-table">
+            <thead>
+              <tr>
+                <th style="width: 24%;">Back Matter Section</th>
+                <th style="width: 22%;">Location in <code>main.tex</code></th>
+                <th style="width: 26%;">External File & Line Range</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="filter-item">
+                <td><strong>DAFTAR PUSTAKA</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1069">main.tex:L1069–L1072</a></td>
+                <td><code>examplecitations.bib</code> (referenced at <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:148">main.tex:L148</a>)</td>
+                <td>Calls <code>\printbibliography[heading=bibintoc, title=DAFTAR PUSTAKA]</code> in IEEE numeric order.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Pernyataan Penggunaan LLM</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1074">main.tex:L1074–L1080</a></td>
+                <td><em>Inline in <code>main.tex</code></em></td>
+                <td>Optional academic transparency statement regarding LLM usage for coding/LaTeX.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>LAMPIRAN — Formatting Header</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1081">main.tex:L1081–L1083</a></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Back_matters/lampiran.tex:1">Back_matters/lampiran.tex:L1–L58</a></td>
+                <td>Sets <code>tocdepth=0</code>, starts <code>\chapter{LAMPIRAN}</code>, and redefines <code>\section</code> to render as <code>Lampiran N: Judul</code> with automatic page breaks. <strong>Do not overwrite lines 1–58.</strong></td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>LAMPIRAN — Appendix Entries</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:1083">main.tex:L1083</a></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Back_matters/lampiran.tex:60">Back_matters/lampiran.tex:L60–L123</a></td>
+                <td>
+                  &bull; <code>L60–L118</code>: Sample <em>Lampiran 1: Example And Rules in Appendix</em> (CSV table import)<br/>
+                  &bull; <code>L120–L123</code>: Sample <em>Lampiran 2: Source Code and Data</em>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 5: JAVADOC MACRO & ENVIRONMENT API REFERENCE -->
+      <section class="doc-section" id="sec-api">
+        <div class="section-header">
+          <h2>5. Template Macro & Environment API Reference (Javadoc Cards)</h2>
+          <span class="sec-tag">Custom Macros & Environments</span>
+        </div>
+        <div class="section-body">
+
+          <!-- API 1: Metadata -->
+          <div class="api-card filter-item" id="api-metadata">
+            <div class="api-card-header">
+              <span class="api-signature">\def\title{...} &nbsp;|&nbsp; \def\englishtitle{...} &nbsp;|&nbsp; \def\author{...} &nbsp;|&nbsp; \def\nim{...}</span>
+              <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:118">Defined in main.tex:L118–L130</a>
+            </div>
+            <div class="api-card-body">
+              <p class="api-desc">
+                Global metadata macros that automatically populate the Indonesian Cover Page, English Title Page, Halaman Persetujuan Pembimbing, Halaman Pengesahan, Halaman Pernyataan Keaslian Karya, Lembar Persetujuan Publikasi, and Kata Pengantar signature block.
+              </p>
+              <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy LaTeX</button>
+                <pre><code>\def\title{Pertahanan Peer Blocking dan Beta Reputation System pada Multi-Agent Multi-Armed Bandits terhadap Data Poisoning di Sistem Rekomendasi}
+\def\englishtitle{Peer Blocking and Beta Reputation System Defense Mechanism in Multi-Agent Multi-Armed Bandits Against Data Poisoning in Recommendation Systems}
+\def\author{Anugrah Frumensius Gansalangi}
+\def\nim{235314091}
+\def\prodi{Informatika}
+\def\program{Informatics}
+\def\fakultas{Sains dan Teknologi}
+\def\faculty{Science and Technology}
+\def\sarjana{Sarjana Komputer}
+\def\pembimbing{Nama Dosen Pembimbing, S.T., M.T.}
+\def\ketuapenguji{Nama Ketua Penguji}
+\def\sekretarispenguji{Nama Sekretaris Penguji}
+\def\dekan{Nama Dekan}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- API 2: \subimport -->
+          <div class="api-card filter-item" id="api-subimport">
+            <div class="api-card-header">
+              <span class="api-signature">\subimport{&lt;DirectoryPath&gt;}{&lt;FilenameWithoutExt&gt;}</span>
+              <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:24">Package: import (main.tex:L24, L1035–L1048)</a>
+            </div>
+            <div class="api-card-body">
+              <p class="api-desc">
+                Imports a modular <code>.tex</code> file while setting its relative working directory to <code>&lt;DirectoryPath&gt;</code>. Always use <code>\subimport</code> instead of <code>\input</code> or <code>\include</code> so images inside a chapter folder (e.g., <code>Skripsi/Metode_Penelitian/</code>) can be loaded directly by filename.
+              </p>
+              <div class="api-meta-list">
+                <div class="api-meta-label">Parameters:</div>
+                <div><code>{DirectoryPath}</code> — Relative folder path from <code>main.tex</code> (e.g., <code>Skripsi/Metode_Penelitian</code>).<br/><code>{FilenameWithoutExt}</code> — Target <code>.tex</code> file name without extension (e.g., <code>metode_penelitian</code>).</div>
+              </div>
+              <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy LaTeX</button>
+                <pre><code>\clearpage
+\subimport{Skripsi/Metode_Penelitian}{metode_penelitian}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- API 3: Equations + \myequation -->
+          <div class="api-card filter-item" id="api-equation">
+            <div class="api-card-header">
+              <span class="api-signature">\begin{equation}\label{eq:...} ... \end{equation} + \myequation{Deskripsi Persamaan}</span>
+              <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:536">Defined in main.tex:L502–L539</a>
+            </div>
+            <div class="api-card-body">
+              <p class="api-desc">
+                Every numbered <code>equation</code> <strong>must</strong> be followed immediately by <code>\myequation{Deskripsi Persamaan}</code> so it is registered in <strong>Daftar Persamaan</strong> (<code>\listofmyequations</code> on page <code>xiv</code>). For unnumbered intermediate steps that should not appear in Daftar Persamaan, use <code>equation*</code> without <code>\myequation</code>.
+              </p>
+              <div class="api-meta-list">
+                <div class="api-meta-label">Numbering:</div>
+                <div>Per-chapter Arabic <code>(\arabic{chapter}.\arabic{equation})</code>, e.g., <code>(3.1)</code> in Bab III.</div>
+                <div class="api-meta-label">Registers In:</div>
+                <div><code>Daftar Persamaan</code> as <code>PERSAMAAN 3.1 DESKRIPSI PERSAMAAN .... page</code>.</div>
+                <div class="api-meta-label">USD Rule Note:</div>
+                <div>Use comma <code>,</code> for decimals in Indonesian math mode, and end displayed equations with <code>,</code> or <code>.</code> before <code>\end{equation}</code>.</div>
+              </div>
+              <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy LaTeX</button>
+                <pre><code>\begin{equation}\label{eq:rating_norm}
+    r'_{u,k} = \frac{r_{u,k} - 0,5}{4,5},
+\end{equation}
+\myequation{Normalisasi Rating MovieLens}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- API 4: Algorithms + \myalgorithm -->
+          <div class="api-card filter-item" id="api-algorithm">
+            <div class="api-card-header">
+              <span class="api-signature">\begin{algorithm}[H] ... \end{algorithm} + \myalgorithm{Nama Algoritma}</span>
+              <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:566">Defined in main.tex:L541–L574</a>
+            </div>
+            <div class="api-card-body">
+              <p class="api-desc">
+                Renders ruled pseudocode using <code>algpseudocode</code> (<code>[noend]</code>) automatically styled in <strong>Courier New 10pt single-spaced</strong>. Every <code>algorithm</code> float <strong>must</strong> be followed immediately by <code>\myalgorithm{Nama Algoritma}</code> to register it in <strong>Daftar Algoritma</strong>.
+              </p>
+              <div class="api-meta-list">
+                <div class="api-meta-label">Numbering:</div>
+                <div>Global Arabic <code>1, 2, 3...</code> (detached from chapters via <code>\counterwithout{algorithm}{chapter}</code> on L542).</div>
+                <div class="api-meta-label">Registers In:</div>
+                <div><code>Daftar Algoritma</code> as <code>ALGORITMA 1 NAMA ALGORITMA .... page</code>.</div>
+              </div>
+              <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy LaTeX</button>
+                <pre><code>\begin{algorithm}[H]
+    \caption{Audit Fase dan Pemblokiran Rekan pada \textit{GosInE-Block}}
+    \label{alg:gosine_block}
+    \begin{algorithmic}[1]
+        \State Snapshot pemenang fase $B_j^{(i)} \gets \arg\max_{k \in S_j^{(i)}} P_{\text{phase}, k}^{(i)}$
+        \If{$j > 1$ \textbf{and} $B_j^{(i)} \neq R_{j-1}^{(i)}$}
+            \State $d^{(i)}(H_{j-1}^{(i)}) \gets \lceil j^\eta \rceil$
+        \EndIf
+    \end{algorithmic}
+\end{algorithm}
+\myalgorithm{Audit Fase dan Pemblokiran Rekan pada GosInE-Block}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- API 5: Tables (longtblr) -->
+          <div class="api-card filter-item" id="api-table">
+            <div class="api-card-header">
+              <span class="api-signature">\begin{longtblr}[caption={...}, label={tab:...}]{colspec={...}, rowhead=1, hlines, vlines}</span>
+              <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:239">Config in main.tex:L108–L114, L239–L243</a>
+            </div>
+            <div class="api-card-body">
+              <p class="api-desc">
+                Multi-page capable table environment from <code>tabularray</code>. Automatically repeats the header row (<code>rowhead = 1</code>) across page breaks with Indonesian continuation labels (<em>Lanjutan</em> / <em>Dilanjutkan di halaman selanjutnya</em>) and registers the table in <strong>DAFTAR TABEL</strong>.
+              </p>
+              <div class="api-meta-list">
+                <div class="api-meta-label">Numbering:</div>
+                <div>Per-chapter Arabic <code>Tabel \arabic{chapter}.\arabic{table}</code> (e.g., <code>Tabel 3.1</code>).</div>
+                <div class="api-meta-label">Outer vs Inner:</div>
+                <div>Put <code>caption={...}</code> and <code>label={tab:...}</code> in the outer brackets <code>[...]</code>; put <code>colspec</code>, <code>rowhead</code>, and borders in the mandatory braces <code>{...}</code>.</div>
+              </div>
+              <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy LaTeX</button>
+                <pre><code>\begin{longtblr}[
+    caption={Parameter Simulasi Eksperimen},
+    label={tab:parameter_simulasi}
+]{
+    colspec = { l c l },
+    rowhead = 1,
+    row{1} = {font=\bfseries\sffamily},
+    hlines, vlines
+}
+    Parameter & Simbol & Nilai \\
+    Jumlah Lengan (\textit{Arms}) & $K$ & $100$ \\
+    Horizon Waktu & $T$ & $1.000.000$ \\
+    Total Agen & $N$ & $25$
+\end{longtblr}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- API 6: Figures & Subfigures -->
+          <div class="api-card filter-item" id="api-figure">
+            <div class="api-card-header">
+              <span class="api-signature">\begin{figure}[H] ... \includegraphics{\detokenize{file_name.png}} ... \end{figure}</span>
+              <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Skripsi/Pendahuluan/pendahuluan.tex:23">Example in pendahuluan.tex:L23–L45</a>
+            </div>
+            <div class="api-card-body">
+              <p class="api-desc">
+                Anchors figures at their exact location in the text using <code>[H]</code> (from the <code>float</code> package) and registers them in <strong>DAFTAR GAMBAR</strong>. Always wrap filenames containing underscores in <code>\detokenize{...}</code> and place the image inside the same chapter directory as the <code>.tex</code> file.
+              </p>
+              <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy LaTeX</button>
+                <pre><code>% Single Figure:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{\detokenize{arsitektur_gosine_block.png}}
+    \caption{Diagram Alir Mekanisme Pertahanan \textit{GosInE-Block}}
+    \label{fig:arsitektur_gosine_block}
+\end{figure}
+
+% Side-by-Side Subfigures:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\detokenize{plot_regret_ucb.png}}
+        \caption{\textit{Cumulative Regret}}
+        \label{fig:sub_regret}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\detokenize{plot_reward_ucb.png}}
+        \caption{\textit{Rolling Mean Reward}}
+        \label{fig:sub_reward}
+    \end{subfigure}
+    \caption{Perbandingan Performa Kebijakan UCB1}
+    \label{fig:performa_ucb}
+\end{figure}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- API 7: Acronyms / Glossary -->
+          <div class="api-card filter-item" id="api-acronym">
+            <div class="api-card-header">
+              <span class="api-signature">\newacronym[sort=KEY]{id}{SHORT}{\textit{Full Term}} &nbsp;&rarr;&nbsp; \acrfull{id} | \acrshort{id} | \acrlong{id}</span>
+              <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Front_matters/glossary_entries.tex:41">Defined in glossary_entries.tex:L41–L74</a>
+            </div>
+            <div class="api-card-body">
+              <p class="api-desc">
+                Defines acronyms in <code>Front_matters/glossary_entries.tex</code>. Only acronyms actually referenced in the text (via <code>\acrfull</code>, <code>\acrshort</code>, <code>\acrlong</code>, or <code>\gls</code>) will appear in <strong>Daftar Singkatan</strong> after running <code>makeglossaries main</code>.
+              </p>
+              <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy LaTeX</button>
+                <pre><code>% 1. Define in Front_matters/glossary_entries.tex:
+\newacronym[sort=MAMAB]{mamab}{MAMAB}{\textit{Multi-Agent Multi-Armed Bandits}}
+\newacronym[sort=BRS]{brs}{BRS}{\textit{Beta Reputation System}}
+\newacronym[sort=UCB]{ucb}{UCB}{\textit{Upper Confidence Bound}}
+
+% 2. Use in chapter prose:
+Kerangka kerja \acrfull{mamab} memungkinkan kolaborasi antaragen. Pada fase komunikasi berikutnya, sistem \acrshort{mamab} memadukan mekanisme \acrfull{brs}.</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- API 8: Citations -->
+          <div class="api-card filter-item" id="api-citation">
+            <div class="api-card-header">
+              <span class="api-signature">\parencite{bibkey} &nbsp;|&nbsp; \cite{bibkey}</span>
+              <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:145">Configured in main.tex:L145–L148, L1070</a>
+            </div>
+            <div class="api-card-body">
+              <p class="api-desc">
+                Outputs IEEE numeric bracketed citations (<code>[1]</code>, <code>[2]</code>) ordered by first appearance in the manuscript and prints them in <strong>DAFTAR PUSTAKA</strong> via <code>biber main</code>.
+              </p>
+              <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy LaTeX</button>
+                <pre><code>Dumatubun dan Soelistijanto \parencite{dumatubun2025} mengevaluasi protokol \textit{GosInE} yang diusulkan oleh Chawla dkk. \parencite{chawla2020} terhadap serangan \textit{data poisoning}.</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- API 9: Appendices (\mylampiran) -->
+          <div class="api-card filter-item" id="api-lampiran">
+            <div class="api-card-header">
+              <span class="api-signature">\section{Judul Lampiran}\label{apx:...} + \mylampiran{Judul Lampiran}</span>
+              <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Back_matters/lampiran.tex:60">Defined in main.tex:L350–L369 &amp; lampiran.tex:L60</a>
+            </div>
+            <div class="api-card-body">
+              <p class="api-desc">
+                Inside <code>Back_matters/lampiran.tex</code> (below line 58), each <code>\section{...}</code> is automatically formatted as <code>Lampiran N: Judul Lampiran</code> (and starts on a new page for <code>N &gt; 1</code>). Call <code>\mylampiran{...}</code> immediately below <code>\section</code> to register it in <strong>DAFTAR LAMPIRAN</strong>.
+              </p>
+              <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy LaTeX</button>
+                <pre><code>\section{Kode Sumber Simulasi Pertahanan MAMAB}\label{apx:source_code}
+\mylampiran{Kode Sumber Simulasi Pertahanan MAMAB}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- API 10: lstlisting -->
+          <div class="api-card filter-item" id="api-lstlisting">
+            <div class="api-card-header">
+              <span class="api-signature">\begin{lstlisting}[language=Python, caption={...}, label={lst:...}] ... \end{lstlisting}</span>
+              <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:331">Configured in main.tex:L318, L331–L345</a>
+            </div>
+            <div class="api-card-body">
+              <p class="api-desc">
+                Displays syntax-highlighted source code blocks with left line numbers and automatic line wrapping. Numbered per chapter (<code>\arabic{chapter}.\arabic{lstlisting}</code>).
+              </p>
+              <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy LaTeX</button>
+                <pre><code>\begin{lstlisting}[language=Python, caption={Pembaruan Reputasi Beta pada Agen Gossip}]
+I_succ = 1.0 if phase_winner[i] == agent.last_rec else 0.0
+agent.r_rep[h] = lam * agent.r_rep[h] + I_succ
+agent.s_rep[h] = lam * agent.s_rep[h] + (1.0 - I_succ)
+\end{lstlisting}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- API 11: TikZ Flowchart Styles -->
+          <div class="api-card filter-item" id="api-tikz">
+            <div class="api-card-header">
+              <span class="api-signature">TikZ Flowchart Styles: startstop | io | process | decision | subprocess | arrow</span>
+              <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/main.tex:161">Defined in main.tex:L161–L208</a>
+            </div>
+            <div class="api-card-body">
+              <p class="api-desc">
+                Pre-configured TikZ shapes in <code>main.tex</code> for drawing methodology flowcharts directly in LaTeX:
+                <code>startstop</code> (red rounded rectangle), <code>io</code> (blue trapezium), <code>process</code> (orange rectangle),
+                <code>decision</code> (green diamond), <code>subprocess</code> (double-bordered green rectangle), and <code>arrow</code> (thick stealth arrow).
+              </p>
+              <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy LaTeX</button>
+                <pre><code>\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[node distance=2cm]
+        \node (start) [startstop] {Akhir Fase $t = A_j$};
+        \node (audit) [decision, below of=start, yshift=-0.5cm] {$B_j^{(i)} = R_{j-1}^{(i)}$?};
+        \node (block) [process, right of=audit, xshift=3cm] {Blokir Rekan $H_{j-1}^{(i)}$};
+        \draw [arrow] (start) -- (audit);
+        \draw [arrow] (audit) -- node[anchor=south] {Tidak} (block);
+    \end{tikzpicture}
+    \caption{Contoh Diagram Alir TikZ}
+    \label{fig:contoh_tikz}
+\end{figure}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- API 12: Cross-Referencing -->
+          <div class="api-card filter-item" id="api-xref">
+            <div class="api-card-header">
+              <span class="api-signature">Tabel \ref{tab:...} &nbsp;|&nbsp; Gambar \ref{fig:...} &nbsp;|&nbsp; Persamaan (\ref{eq:...}) &nbsp;|&nbsp; Algoritma \ref{alg:...}</span>
+              <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiLatek/SkripsiSh1re/SkripsiSh1re/Skripsi/Pendahuluan/pendahuluan.tex:66">Convention in pendahuluan.tex:L66</a>
+            </div>
+            <div class="api-card-body">
+              <p class="api-desc">
+                <code>\ref{...}</code> outputs <strong>only the number</strong> (e.g., <code>3.1</code>). Always write the capitalized Indonesian object type before <code>\ref</code>:
+              </p>
+              <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy LaTeX</button>
+                <pre><code>Seperti ditunjukkan pada Tabel \ref{tab:parameter_simulasi} dan Gambar \ref{fig:arsitektur_gosine_block}, nilai ekspektasi dihitung menggunakan Persamaan (\ref{eq:rating_norm}) sesuai langkah pada Algoritma \ref{alg:gosine_block} (lihat Lampiran \ref{apx:source_code}).</code></pre>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION 6: BUILD & CLI COMMANDS -->
+      <section class="doc-section" id="sec-build">
+        <div class="section-header">
+          <h2>6. Build Toolchain & CLI Execution Reference</h2>
+          <span class="sec-tag">LuaLaTeX + MiKTeX + Perl</span>
+        </div>
+        <div class="section-body">
+          <p class="api-desc">
+            Run these commands inside <code>d:\KULIAH\SkripsiLatek\SkripsiSh1re\SkripsiSh1re</code> in PowerShell (<code>pwsh</code>). Because <code>main.tex</code> uses <code>fontspec</code> with system fonts (<em>Times New Roman</em> and <em>Courier New</em>), <strong><code>lualatex</code> is mandatory</strong>.
+          </p>
+          <div class="code-wrapper">
+            <button class="copy-btn" onclick="copyCode(this)">Copy PowerShell</button>
+            <pre><code># 1. Initial LuaLaTeX pass via latexmk
+latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -pdflatex="lualatex %O %S" main
+
+# 2. Generate Daftar Singkatan (acronyms/glossary)
+makeglossaries main
+
+# 3. Generate Daftar Pustaka (once .bib file & citations are active)
+biber main
+
+# 4. Final LuaLaTeX pass to resolve all TOC, glossary, citations & cross-references
+latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -pdflatex="lualatex %O %S" main</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 7: EXTERNAL READ-ONLY REFERENCE DIRECTORIES -->
+      <section class="doc-section" id="sec-external">
+        <div class="section-header">
+          <h2>7. Attached Read-Only Reference Directories (For Writing Bab I–V)</h2>
+          <span class="sec-tag">External Workspace Context</span>
+        </div>
+        <div class="section-body">
+          <table class="javadoc-table">
+            <thead>
+              <tr>
+                <th style="width: 32%;">Reference File</th>
+                <th style="width: 28%;">VS Code Direct Open Link</th>
+                <th>What to Reference When Writing the Thesis</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="filter-item">
+                <td><strong>USD 2022 Skripsi Guidelines</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/brainstorm_no_codebase/USD_SKRIPSI_GUIDELINES.md:1">USD_SKRIPSI_GUIDELINES.md</a></td>
+                <td>Official USD chapter/subchapter ordering, IEEE citation rules, 10-core paper entries, typography, and anti-plagiarism limits (&le; 40% total, &le; 10% single source).</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Master 4-Algorithm Spec</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/brainstorm_no_codebase/ALGORITHMS.md:1">ALGORITHMS.md</a></td>
+                <td>Provenance matrix, step-by-step equations, flowcharts, and Python mappings for Unprotected <code>GosInE</code>, <code>GosInE-Block</code>, <code>Pure BRS-GosInE</code>, and <code>Hybrid BRS-Block</code>.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Canonical Notation &amp; Audit</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/brainstorm_no_codebase/THESIS_AGENT_CONTEXT.md:1">THESIS_AGENT_CONTEXT.md</a></td>
+                <td>Cross-paper symbol reconciliation table, verified theorems/equations, and experimental scenario matrix.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Symbol Lookup Cheatsheet</strong></td>
+                <td><a class="file-link" href="vscode://file/d:/KULIAH/brainstorm_no_codebase/NOTATION_CHEATSHEET.md:1">NOTATION_CHEATSHEET.md</a></td>
+                <td>Fast alphabetical symbol definitions (A–Z, &alpha;–&sigma;) and Python variable equivalents.</td>
+              </tr>
+              <tr class="filter-item">
+                <td><strong>Simulation Codebase (<code>mab_def</code>)</strong></td>
+                <td>
+                  <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiPrograms/MAB/mab_def/main.py:1">mab_def/main.py</a>
+                  <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiPrograms/MAB/mab_def/src/env.py:1">src/env.py</a>
+                  <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiPrograms/MAB/mab_def/src/agents.py:1">src/agents.py</a>
+                  <a class="file-link" href="vscode://file/d:/KULIAH/SkripsiPrograms/MAB/mab_def/src/simulation.py:1">src/simulation.py</a>
+                </td>
+                <td>Read-only Python simulation implementation and <code>results/</code> plots for referencing exact implementation details in Bab III and Bab IV.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Dark / Light Theme Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('skripsi_javadoc_theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('skripsi_javadoc_theme', next);
+    });
+
+    // Live Search Filter (press '/' to focus)
+    const searchInput = document.getElementById('searchInput');
+    const filterItems = document.querySelectorAll('.filter-item');
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.trim().toLowerCase();
+      filterItems.forEach((el) => {
+        if (!q || el.innerText.toLowerCase().includes(q)) {
+          el.classList.remove('hidden-by-filter');
+        } else {
+          el.classList.add('hidden-by-filter');
+        }
+      });
+    });
+
+    // One-click Copy LaTeX / Code button
+    function copyCode(btn) {
+      const codeEl = btn.parentElement.querySelector('code');
+      if (!codeEl) return;
+      navigator.clipboard.writeText(codeEl.innerText).then(() => {
+        const oldText = btn.innerText;
+        btn.innerText = 'Copied!';
+        setTimeout(() => { btn.innerText = oldText; }, 1400);
+      });
+    }
+  </script>
+</body>
+</html>
